@@ -3,28 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Susurro — vive el ASMR</title>
+<title>Susurro — Plataforma Profesional de ASMR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #14121a;
-    --bg-soft: #1b1822;
-    --panel: #211d29;
-    --panel-border: #322b3a;
-    --plum: #2a1f2e;
+    --bg: #0d0b11;
+    --bg-soft: #131118;
+    --panel: #191622;
+    --panel-border: #262232;
+    --panel-hover: #2e293d;
     --rose: #e8a0bc;
     --rose-dim: #b97e93;
     --gold: #c9a876;
     --cream: #f4ede4;
-    --cream-dim: #b7aebd;
+    --cream-dim: #9c93a5;
     --mic-green: #8fb89a;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
-
-  html{ scroll-behavior:smooth; }
-
+  html{ scroll-behavior:smooth; -webkit-font-smoothing: antialiased; }
   body{
     background: var(--bg);
     color: var(--cream);
@@ -33,1076 +35,606 @@
     overflow-x:hidden;
   }
 
-  ::selection{ background: var(--rose); color:#1b1822; }
+  /* Scrollbar Profesional */
+  ::-webkit-scrollbar{ width:6px; height:6px; }
+  ::-webkit-scrollbar-track{ background: var(--bg); }
+  ::-webkit-scrollbar-thumb{ background: var(--panel-border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--cream-dim); }
 
-  h1,h2,h3,.display{
-    font-family: 'Fraunces', serif;
-    font-weight:600;
-    letter-spacing:-0.01em;
-  }
-
-  .mono{
-    font-family:'JetBrains Mono', monospace;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-  }
-
+  h1,h2,h3,.display-font{ font-family: 'Fraunces', serif; font-weight:500; letter-spacing:-0.01em; }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:0.04em; text-transform:uppercase; }
   a{ color:inherit; text-decoration:none; }
-  button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
-  img{ max-width:100%; display:block; }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
-  }
-
-  /* ===== background ambient waveform ===== */
-  .ambient{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 0%, rgba(232,160,188,0.10), transparent 60%),
-      radial-gradient(ellipse 50% 35% at 90% 10%, rgba(201,168,118,0.08), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(143,184,154,0.06), transparent 60%);
-  }
-
-  /* ===== top nav ===== */
-  header{
-    position:sticky; top:0; z-index:50;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:14px 24px;
-    background:rgba(20,18,26,0.82);
-    backdrop-filter: blur(14px);
-    border-bottom:1px solid var(--panel-border);
-  }
-
-  @media (min-width: 901px) {
-    header { padding:18px 36px; }
-  }
-
-  .logo{ display:flex; align-items:center; gap:10px; }
-  .logo .mark{
-    width:30px; height:30px;
-    display:flex; align-items:center; justify-content:center;
-    gap:2px;
-  }
-  .logo .mark span{
-    width:3px; background:var(--rose); border-radius:2px;
-    animation: bar 1.6s ease-in-out infinite;
-  }
-  .logo .mark span:nth-child(1){ height:10px; animation-delay:0s; }
-  .logo .mark span:nth-child(2){ height:22px; animation-delay:0.2s; }
-  .logo .mark span:nth-child(3){ height:14px; animation-delay:0.4s; }
-  .logo .mark span:nth-child(4){ height:26px; animation-delay:0.6s; }
-  .logo .mark span:nth-child(5){ height:8px; animation-delay:0.8s; }
-  @keyframes bar{
-    0%,100%{ transform:scaleY(0.4); }
-    50%{ transform:scaleY(1); }
-  }
-  .logo-text{ font-family:'Fraunces',serif; font-size:1.35rem; font-weight:600; letter-spacing:-0.02em; }
-  .logo-text .dot{ color: var(--rose); }
-
-  nav.main-nav{ display:flex; gap:24px; }
-  @media (min-width: 1100px) {
-    nav.main-nav{ gap:34px; }
-  }
-  nav.main-nav a{
-    font-size:0.92rem; color:var(--cream-dim); font-weight:500;
-    position:relative; padding-bottom:4px;
-    transition:color .2s;
-  }
-  nav.main-nav a:hover, nav.main-nav a.active{ color: var(--cream); }
-  nav.main-nav a.active::after{
-    content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px;
-    background: var(--rose); border-radius:2px;
-  }
-
-  .nav-right{ display:flex; align-items:center; gap:12px; }
-  @media (min-width: 901px) {
-    .nav-right{ gap:16px; }
-  }
-
-  .search-box{
-    display:flex; align-items:center; gap:8px;
-    background:var(--panel); border:1px solid var(--panel-border);
-    border-radius:999px; padding:9px 16px; width:180px;
-    color:var(--cream-dim); font-size:0.85rem;
-    transition: width 0.2s ease;
-  }
-  @media (min-width: 1100px) {
-    .search-box { width: 230px; }
-  }
-  .search-box svg{ width:15px; height:15px; opacity:0.7; flex-shrink:0; }
-  .search-box input{
-    background:none; border:none; color:var(--cream); font-family:inherit; font-size:0.85rem; width:100%; outline:none;
-  }
-  .search-box input::placeholder{ color:var(--cream-dim); }
-
-  .icon-btn{
-    width:38px; height:38px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--panel); border:1px solid var(--panel-border);
-    position:relative; transition: border-color .2s, transform .2s;
-  }
-  .icon-btn:hover{ border-color: var(--rose-dim); transform:translateY(-1px); }
-  .icon-btn svg{ width:17px; height:17px; }
-  .badge-dot{
-    position:absolute; top:-2px; right:-2px;
-    width:9px; height:9px; border-radius:50%;
-    background:var(--rose); border:2px solid var(--bg);
-  }
-
-  .btn{
-    padding:10px 20px; border-radius:999px; font-size:0.88rem; font-weight:600;
-    transition: transform .2s, box-shadow .2s, background .2s;
-    white-space: nowrap;
-  }
-  .btn-primary{
-    background: linear-gradient(135deg, var(--rose), var(--rose-dim));
-    color:#1b1320;
-  }
-  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(232,160,188,0.25); }
-  .btn-ghost{
-    background:transparent; border:1px solid var(--panel-border); color:var(--cream);
-  }
-  .btn-ghost:hover{ border-color: var(--cream-dim); }
-
-  .avatar{
-    width:38px; height:38px; border-radius:50%;
-    background: linear-gradient(135deg, var(--gold), var(--rose));
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces',serif; font-weight:600; font-size:0.95rem; color:#1b1320;
-    flex-shrink:0;
-  }
-
-  /* ===== layout ===== */
-  .app{
-    position:relative; z-index:1;
-    display:grid;
-    grid-template-columns: 240px minmax(0,1fr) 300px;
-    gap:0;
-    max-width:1480px; margin:0 auto;
-  }
-
-  /* ----- sidebar ----- */
-  .sidebar{
-    padding:28px 16px 40px 24px;
-    position:sticky; top:73px; align-self:start;
-    height:calc(100vh - 73px); overflow-y:auto;
-    scrollbar-width:thin;
-  }
-  .sidebar::-webkit-scrollbar{ width:6px; }
-  .sidebar::-webkit-scrollbar-thumb{ background:var(--panel-border); border-radius:4px; }
-
-  .side-section{ margin-bottom:30px; }
-  .side-label{
-    font-size:0.68rem; color:var(--cream-dim); margin-bottom:12px; opacity:0.7;
-  }
-  .side-link{
-    display:flex; align-items:center; gap:12px;
-    padding:10px 12px; border-radius:10px;
-    color:var(--cream-dim); font-size:0.9rem; font-weight:500;
-    margin-bottom:2px; transition:background .15s, color .15s;
-  }
-  .side-link svg{ width:18px; height:18px; flex-shrink:0; }
-  .side-link:hover{ background:var(--panel); color:var(--cream); }
-  .side-link.active{ background:var(--panel); color:var(--rose); }
-
-  .creator-mini{
-    display:flex; align-items:center; gap:10px;
-    padding:8px 12px; border-radius:10px; margin-bottom:2px;
-    transition:background .15s;
-  }
-  .creator-mini:hover{ background:var(--panel); }
-  .creator-mini .avatar{ width:30px; height:30px; font-size:0.75rem; }
-  .creator-mini .ava-status{
-    width:30px; height:30px; border-radius:50%; position:relative; flex-shrink:0;
-  }
-  .creator-mini .ava-status::after{
-    content:''; position:absolute; bottom:-1px; right:-1px;
-    width:9px; height:9px; border-radius:50%;
-    background:var(--mic-green); border:2px solid var(--bg);
-  }
-  .creator-mini-info{ min-width:0; }
-  .creator-mini-info .name{ font-size:0.83rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .creator-mini-info .tag{ font-size:0.72rem; color:var(--cream-dim); }
-
-  /* ----- feed center ----- */
-  .feed{
-    padding:28px 24px 80px;
-    border-left:1px solid var(--panel-border);
-    border-right:1px solid var(--panel-border);
-  }
-
-  /* hero / live ribbon */
-  .hero{
-    border-radius:22px;
-    padding:38px 38px;
-    margin-bottom:30px;
-    position:relative;
-    overflow:hidden;
-    background:
-      radial-gradient(ellipse 80% 100% at 100% 0%, rgba(232,160,188,0.22), transparent 60%),
-      radial-gradient(ellipse 70% 80% at 0% 100%, rgba(143,184,154,0.14), transparent 60%),
-      linear-gradient(135deg, #251f2c, #1c1822);
-    border:1px solid var(--panel-border);
-  }
-  .hero-eyebrow{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:0.7rem; color:var(--rose); margin-bottom:16px;
-  }
-  .hero-eyebrow .live-pulse{
-    width:7px; height:7px; border-radius:50%; background:#ff5d7a;
-    box-shadow:0 0 0 0 rgba(255,93,122,0.6);
-    animation:pulse 1.8s infinite;
-  }
-  @keyframes pulse{
-    0%{ box-shadow:0 0 0 0 rgba(255,93,122,0.55); }
-    70%{ box-shadow:0 0 0 9px rgba(255,93,122,0); }
-    100%{ box-shadow:0 0 0 0 rgba(255,93,122,0); }
-  }
-  .hero h1{
-    font-size:2.6rem; line-height:1.08; max-width:560px; margin-bottom:14px;
-  }
-  .hero h1 em{ color: var(--rose); font-style:normal; }
-  .hero p{
-    color:var(--cream-dim); max-width:460px; font-size:0.98rem; line-height:1.55; margin-bottom:26px;
-  }
-  .hero-actions{ display:flex; flex-wrap: wrap; gap:12px; }
-
-  .hero-waveform{
-    position:absolute; right:38px; bottom:0; top:0;
-    width:200px; display:flex; align-items:flex-end; justify-content:center; gap:4px;
-    opacity:0.9;
-  }
-  @media (min-width: 1200px) {
-    .hero-waveform { width: 260px; }
-  }
-  .hero-waveform span{
-    width:5px; border-radius:3px;
-    background: linear-gradient(180deg, var(--rose), var(--gold));
-    animation: wave 2.4s ease-in-out infinite;
-  }
-
-  /* feed tabs */
-  .feed-tabs{
-    display:flex; gap:8px; margin-bottom:22px; overflow-x:auto; padding-bottom:6px;
-    scrollbar-width: none;
-  }
-  .feed-tabs::-webkit-scrollbar { display: none; }
-  .feed-tab{
-    padding:9px 18px; border-radius:999px; font-size:0.85rem; font-weight:500;
-    background:var(--panel); border:1px solid var(--panel-border); color:var(--cream-dim);
-    white-space:nowrap; transition:all .2s;
-  }
-  .feed-tab:hover{ color:var(--cream); }
-  .feed-tab.active{ background:var(--rose); color:#1b1320; border-color:var(--rose); font-weight:600; }
-
-  /* upload bar */
-  .upload-bar{
-    display:flex; align-items:center; gap:14px;
-    background:var(--panel); border:1px solid var(--panel-border);
-    border-radius:18px; padding:16px 18px; margin-bottom:26px;
-    cursor: pointer;
-  }
-  .upload-bar .avatar{ width:42px; height:42px; }
-  .upload-fake-input{
-    flex:1; background:var(--bg-soft); border:1px solid var(--panel-border);
-    border-radius:999px; padding:11px 18px; color:var(--cream-dim); font-size:0.88rem;
-    transition:border-color .2s;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .upload-fake-input:hover{ border-color:var(--rose-dim); }
-  .upload-bar-actions{ display:flex; gap:8px; }
-  .upload-bar-actions .icon-btn{ width:38px; height:38px; }
-
-  /* live strip */
-  .live-strip{
-    display:flex; gap:16px; overflow-x:auto; margin-bottom:32px; padding-bottom:6px;
-    scrollbar-width: none;
-  }
-  .live-strip::-webkit-scrollbar { display: none; }
-  .live-card{
-    flex:0 0 100px; cursor:pointer;
-  }
-  .live-ring{
-    width:76px; height:76px; border-radius:50%; padding:3px;
-    background: conic-gradient(from 0deg, var(--rose), var(--gold), var(--mic-green), var(--rose));
-    margin:0 auto 8px;
-  }
-  .live-ring .avatar{
-    width:100%; height:100%; border:3px solid var(--bg); font-size:1.4rem;
-  }
-  .live-card .lname{ text-align:center; font-size:0.78rem; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .live-card .ltag{ text-align:center; font-size:0.7rem; color:var(--rose); display:flex; align-items:center; justify-content:center; gap:4px; }
-  .live-card .ltag .dot{ width:5px;height:5px;border-radius:50%; background:#ff5d7a; }
-
-  /* post card */
-  .post{
-    background:var(--panel); border:1px solid var(--panel-border);
-    border-radius:20px; margin-bottom:22px; overflow:hidden;
-  }
-  .post-head{
-    display:flex; align-items:center; gap:12px; padding:18px 20px 14px;
-  }
-  .post-head .meta{ flex:1; min-width:0; }
-  .post-head .name-row{ display:flex; align-items:center; gap:6px; font-size:0.92rem; font-weight:600; }
-  .verified{ width:14px; height:14px; color:var(--rose); flex-shrink:0; }
-  .post-head .sub{ font-size:0.78rem; color:var(--cream-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .post-menu{ width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--cream-dim); }
-  .post-menu:hover{ background:var(--bg-soft); }
-
-  .post-text{
-    padding:0 20px 14px; font-size:0.92rem; line-height:1.6; color:var(--cream);
-  }
-  .post-text .triggers{ color:var(--rose); font-weight:500; }
-
-  .post-media{
-    position:relative; width:100%; aspect-ratio:16/9;
-    overflow:hidden;
-  }
-  .post-media img{ width:100%; height:100%; object-fit:cover; }
-  .play-overlay{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(180deg, rgba(20,18,26,0) 50%, rgba(20,18,26,0.55) 100%);
-    transition:background .2s;
-  }
-  .post-media:hover .play-overlay{ background:rgba(20,18,26,0.25); }
-  .play-btn{
-    width:62px; height:62px; border-radius:50%;
-    background:rgba(244,237,228,0.92); display:flex; align-items:center; justify-content:center;
-    transition:transform .2s;
-  }
-  .post-media:hover .play-btn{ transform:scale(1.08); }
-  .play-btn svg{ width:22px; height:22px; color:#1b1320; margin-left:3px; }
-
-  .media-duration{
-    position:absolute; bottom:12px; right:12px;
-    background:rgba(20,18,26,0.75); padding:4px 9px; border-radius:6px;
-    font-size:0.72rem; font-family:'JetBrains Mono',monospace;
-  }
-  .media-tag{
-    position:absolute; top:12px; left:12px;
-    background:rgba(20,18,26,0.75); backdrop-filter:blur(4px);
-    padding:5px 11px; border-radius:999px; font-size:0.68rem; color:var(--rose); display:flex; align-items:center; gap:5px;
-  }
-
-  .audio-card{
-    margin:0 20px 14px; padding:16px 18px;
-    background:var(--bg-soft); border:1px solid var(--panel-border); border-radius:14px;
-    display:flex; align-items:center; gap:14px;
-  }
-  .audio-play{
-    width:44px; height:44px; border-radius:50%; flex-shrink:0;
-    background:var(--rose); display:flex; align-items:center; justify-content:center;
-  }
-  .audio-play svg{ width:16px; height:16px; color:#1b1320; margin-left:2px; }
-  .audio-wave{ flex:1; display:flex; align-items:center; gap:2px; height:32px; overflow: hidden; }
-  .audio-wave span{ width:3px; border-radius:2px; background:var(--panel-border); flex-shrink:0; }
-  .audio-wave span.played{ background:var(--rose); }
-  .audio-time{ font-size:0.72rem; color:var(--cream-dim); font-family:'JetBrains Mono',monospace; flex-shrink:0; }
-
-  .post-stats{
-    display:flex; align-items:center; gap:4px;
-    padding:8px 20px; font-size:0.76rem; color:var(--cream-dim);
-  }
-  .post-stats .stack-icons{ display:flex; }
-  .post-stats .stack-icons span{
-    width:18px; height:18px; border-radius:50%; background:var(--rose); border:2px solid var(--panel);
-    margin-left:-6px; display:inline-flex; align-items:center; justify-content:center; font-size:9px;
-  }
-  .post-stats .stack-icons span:first-child{ margin-left:0; }
-
-  .post-actions{
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:10px 14px 16px; border-top:1px solid var(--panel-border); margin-top:8px;
-    overflow-x: auto; scrollbar-width: none;
-  }
-  .post-actions::-webkit-scrollbar { display: none; }
-  .action-group{ display:flex; gap:2px; }
-  .action-btn{
-    display:flex; align-items:center; gap:7px;
-    padding:9px 12px; border-radius:10px; font-size:0.82rem; font-weight:500; color:var(--cream-dim);
-    transition:background .15s, color .15s; white-space: nowrap;
-  }
-  .action-btn:hover{ background:var(--bg-soft); color:var(--cream); }
-  .action-btn svg{ width:18px; height:18px; flex-shrink: 0; }
-  .action-btn.liked{ color:var(--rose); }
-  .action-btn.liked svg{ fill:var(--rose); stroke:var(--rose); }
-  .action-btn.saved svg{ fill:var(--gold); stroke:var(--gold); }
-  .action-btn.saved{ color:var(--gold); }
-
-  .tip-btn{
-    display:flex; align-items:center; gap:7px;
-    padding:9px 14px; border-radius:10px; font-size:0.82rem; font-weight:600;
-    background:linear-gradient(135deg, rgba(201,168,118,0.18), rgba(201,168,118,0.08));
-    border:1px solid rgba(201,168,118,0.35); color:var(--gold); white-space: nowrap;
-  }
-  .tip-btn:hover{ background:rgba(201,168,118,0.25); }
-  .tip-btn svg{ width:16px; height:16px; flex-shrink: 0; }
-
-  /* ----- right rail ----- */
-  .rail{
-    padding:28px 24px 28px 16px;
-    position:sticky; top:73px; align-self:start;
-    height:calc(100vh - 73px); overflow-y:auto;
-    scrollbar-width:thin;
-  }
-  .rail::-webkit-scrollbar{ width:6px; }
-  .rail::-webkit-scrollbar-thumb{ background:var(--panel-border); border-radius:4px; }
-
-  .rail-card{
-    background:var(--panel); border:1px solid var(--panel-border); border-radius:18px;
-    padding:20px; margin-bottom:22px;
-  }
-  .rail-title{ font-size:0.95rem; font-weight:600; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
-  .rail-title .see-all{ font-size:0.74rem; color:var(--rose-dim); font-weight:500; }
-
-  .stat-self{
-    display:flex; align-items:center; gap:12px; margin-bottom:18px;
-  }
-  .stat-self .info .name{ font-weight:600; font-size:0.92rem; }
-  .stat-self .info .handle{ font-size:0.76rem; color:var(--cream-dim); }
-  .stat-grid{
-    display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; text-align:center;
-  }
-  .stat-grid .stat-box{
-    background:var(--bg-soft); border-radius:10px; padding:10px 4px;
-  }
-  .stat-grid .num{ font-family:'Fraunces',serif; font-weight:600; font-size:1.05rem; color:var(--rose); }
-  .stat-grid .lbl{ font-size:0.62rem; color:var(--cream-dim); margin-top:2px; }
-
-  .suggest-row{
-    display:flex; align-items:center; gap:10px; margin-bottom:14px;
-  }
-  .suggest-row:last-child{ margin-bottom:0; }
-  .suggest-row .info{ flex:1; min-width:0; }
-  .suggest-row .info .name{ font-size:0.85rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .suggest-row .info .desc{ font-size:0.72rem; color:var(--cream-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .follow-pill{
-    font-size:0.72rem; font-weight:600; padding:7px 14px; border-radius:999px;
-    border:1px solid var(--rose-dim); color:var(--rose);
-    flex-shrink:0; transition:all .2s;
-  }
-  .follow-pill:hover{ background:var(--rose); color:#1b1320; }
-  .follow-pill.following{ background:var(--panel-border); border-color:var(--panel-border); color:var(--cream-dim); }
-
-  .trend-row{
-    display:flex; align-items:baseline; justify-content:space-between; padding:8px 0;
-    border-bottom:1px solid var(--panel-border); font-size:0.84rem; gap: 8px;
-  }
-  .trend-row:last-child{ border-bottom:none; }
-  .trend-row .tag{ color:var(--cream); font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .trend-row .count{ color:var(--cream-dim); font-size:0.74rem; flex-shrink: 0; }
-
-  footer.rail-foot{
-    font-size:0.7rem; color:var(--cream-dim); line-height:1.8; padding:0 4px;
-  }
-  footer.rail-foot a{ color:var(--cream-dim); }
-  footer.rail-foot a:hover{ color:var(--rose); }
-
-  @keyframes wave{
-    0%,100%{ height:18%; }
-    50%{ height:90%; }
-  }
-
-  /* ===== floating upload button (mobile) ===== */
-  .fab-upload{
-    position:fixed; bottom:26px; right:26px; z-index:60;
-    width:58px; height:58px; border-radius:50%;
-    background:linear-gradient(135deg, var(--rose), var(--gold));
-    display:none; align-items:center; justify-content:center;
-    box-shadow:0 10px 28px rgba(232,160,188,0.35);
-  }
-  .fab-upload svg{ width:24px; height:24px; color:#1b1320; }
-
-  /* ===== modal: upload ===== */
-  .modal-backdrop{
-    position:fixed; inset:0; background:rgba(10,9,13,0.7); backdrop-filter:blur(6px);
-    display:none; align-items:center; justify-content:center; z-index:100; padding:16px;
-  }
-  .modal-backdrop.open{ display:flex; }
-  .modal{
-    background:var(--bg-soft); border:1px solid var(--panel-border); border-radius:22px;
-    width:100%; max-width:560px; max-height:85vh; display: flex; flex-direction: column; overflow: hidden;
-  }
-  .modal-header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 24px; border-bottom:1px solid var(--panel-border);
-  }
-  .modal-header h3{ font-size:1.2rem; }
-  .modal-close{ width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--cream-dim); }
-  .modal-close:hover{ background:var(--panel); color:var(--cream); }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; outline: none; }
   
-  .modal-body{ padding:24px; overflow-y: auto; flex: 1; }
-
-  .upload-tabs{ display:flex; gap:8px; margin-bottom:22px; }
-  .upload-tab{
-    flex:1; padding:11px 6px; border-radius:12px; font-size:0.84rem; font-weight:600;
-    background:var(--panel); border:1px solid var(--panel-border); color:var(--cream-dim);
-    display:flex; align-items:center; justify-content:center; gap:6px;
-  }
-  .upload-tab svg{ width:16px; height:16px; flex-shrink: 0; }
-  .upload-tab.active{ background:var(--rose); border-color:var(--rose); color:#1b1320; }
-
-  .dropzone{
-    border:1.5px dashed var(--panel-border); border-radius:16px;
-    padding:32px 16px; text-align:center; margin-bottom:18px;
-    transition:border-color .2s, background .2s;
-  }
-  .dropzone:hover{ border-color:var(--rose-dim); background:rgba(232,160,188,0.04); }
-  .dropzone svg{ width:34px; height:34px; color:var(--cream-dim); margin:0 auto 12px; }
-  .dropzone .dz-title{ font-weight:600; font-size:0.92rem; margin-bottom:4px; }
-  .dropzone .dz-sub{ font-size:0.76rem; color:var(--cream-dim); }
-
-  .field{ margin-bottom:16px; }
-  .field label{ display:block; font-size:0.78rem; color:var(--cream-dim); margin-bottom:7px; font-weight:500; }
-  .field textarea, .field input[type=text]{
-    width:100%; background:var(--panel); border:1px solid var(--panel-border); border-radius:12px;
-    padding:12px 14px; color:var(--cream); font-family:inherit; font-size:0.88rem; resize:none; outline:none;
-    transition:border-color .2s;
-  }
-  .field textarea:focus, .field input[type=text]:focus{ border-color:var(--rose-dim); }
-
-  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
-  .chip{
-    padding:7px 14px; border-radius:999px; font-size:0.78rem; cursor: pointer;
-    background:var(--panel); border:1px solid var(--panel-border); color:var(--cream-dim);
-  }
-  .chip.sel{ background:var(--rose); border-color:var(--rose); color:#1b1320; font-weight:600; }
-
-  .modal-footer{
-    display:flex; align-items:center; justify-content:space-between; gap: 16px;
-    padding:18px 24px; border-top:1px solid var(--panel-border); background: var(--bg-soft);
-  }
-  .visibility-toggle{ display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--cream-dim); cursor: pointer; }
-
-  /* ===== RESPONSIVE MEDIA QUERIES ===== */
-  @media (max-width: 1200px){
-    .app{ grid-template-columns: 80px minmax(0,1fr) 280px; }
-    .sidebar .side-link span.lbl, .sidebar .side-label, .creator-mini-info{ display:none; }
-    .sidebar .side-link, .creator-mini{ justify-content:center; padding: 12px; }
-    .sidebar{ padding: 28px 10px; }
+  /* Atmósfera Ambiental */
+  .ambient-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: 
+      radial-gradient(circle at 15% 0%, rgba(232,160,188,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 85% 20%, rgba(201,168,118,0.05) 0%, transparent 40%);
   }
 
-  @media (max-width: 990px){
-    .app{ grid-template-columns: 80px minmax(0,1fr); }
-    .rail{ display:none; }
+  /* ===== HEADER NAVEGACIÓN ===== */
+  header{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 32px;
+    background: rgba(13, 11, 17, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--panel-border);
   }
 
-  @media (max-width: 768px){
-    .app{ grid-template-columns: 1fr; }
-    .sidebar{ display:none; }
-    nav.main-nav{ display:none; }
-    .search-box{ display:none; }
-    .fab-upload{ display:flex; }
-    header{ padding:14px 18px; }
-    .feed{ border:none; padding:18px 14px 90px; }
-    .hero{ padding:28px 22px; }
-    .hero h1{ font-size:1.9rem; }
-    .hero-waveform{ display:none; }
-    .upload-bar { display: none; }
+  .logo{ display:flex; align-items:center; gap:12px; cursor: pointer; }
+  .logo-icon{
+    display:flex; align-items:center; gap:3px;
   }
+  .logo-icon span{
+    width:3px; height:16px; background:var(--rose); border-radius:2px;
+    animation: pulseWave 1.4s infinite ease-in-out;
+  }
+  .logo-icon span:nth-child(2){ height: 24px; animation-delay: 0.15s; }
+  .logo-icon span:nth-child(3){ height: 18px; animation-delay: 0.3s; }
+  .logo-icon span:nth-child(4){ height: 28px; animation-delay: 0.45s; }
+  @keyframes pulseWave{ 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+  .logo-text{ font-family:'Fraunces', serif; font-size:1.4rem; font-weight:600; }
+  .logo-text span{ color: var(--rose); }
+
+  nav.nav-central{ display:flex; gap:8px; }
+  .nav-btn{
+    padding: 8px 16px; border-radius: var(--radius-lg); font-size: 0.9rem;
+    color: var(--cream-dim); font-weight: 500; transition: var(--transition);
+  }
+  .nav-btn:hover, .nav-btn.active{ color: var(--cream); background: var(--bg-soft); }
+  .nav-btn.active{ color: var(--rose); font-weight: 600; }
+
+  .header-actions{ display:flex; align-items:center; gap:16px; }
+  .search-container{
+    display:flex; align-items:center; gap:10px;
+    background: var(--bg-soft); border: 1px solid var(--panel-border);
+    padding: 8px 16.6px; border-radius: 999px; width: 220px; transition: var(--transition);
+  }
+  .search-container:focus-within{ border-color: var(--rose-dim); width: 260px; }
+  .search-container input{
+    background:none; border:none; color:var(--cream); font-size:0.85rem; width:100%; outline:none;
+  }
+  .search-container svg{ width: 16px; height: 16px; color: var(--cream-dim); }
+
+  .circle-icon{
+    width:40px; height:40px; border-radius:50%; background: var(--bg-soft);
+    border: 1px solid var(--panel-border); display:flex; align-items:center; justify-content:center;
+    position:relative; transition: var(--transition);
+  }
+  .circle-icon:hover{ border-color: var(--rose-dim); background: var(--panel); }
+  .dot-badge{ position:absolute; top:2px; right:2px; width:8px; height:8px; background:var(--rose); border-radius:50%; }
+
+  .btn-accent{
+    background: var(--cream); color: var(--bg); padding: 10px 20px;
+    border-radius: 999px; font-size: 0.88rem; font-weight: 600; transition: var(--transition);
+  }
+  .btn-accent:hover{ transform: translateY(-1px); opacity: 0.95; }
+
+  /* ===== DISEÑO ESTRUCTURAL INTERNO ===== */
+  .app-container{
+    position:relative; z-index:1; display:grid;
+    grid-template-columns: 260px 1fr 320px;
+    max-width: 1600px; margin: 0 auto;
+  }
+
+  /* BARRA LATERAL (SIDEBAR) */
+  .sidebar{
+    padding: 32px 16px; position: sticky; top: 73px; height: calc(100vh - 73px);
+    display: flex; flex-direction: column; gap: 32px;
+  }
+  .menu-group{ display: flex; flex-direction: column; gap: 4px; }
+  .group-title{ font-size: 0.7rem; color: var(--cream-dim); padding-left: 12px; margin-bottom: 8px; }
+  .sidebar-link{
+    display: flex; align-items: center; gap: 14px; padding: 12px;
+    border-radius: var(--radius-md); font-size: 0.92rem; color: var(--cream-dim);
+    font-weight: 500; transition: var(--transition);
+  }
+  .sidebar-link svg{ width: 18px; height: 18px; opacity: 0.8; }
+  .sidebar-link:hover{ background: var(--panel); color: var(--cream); }
+  .sidebar-link.active{ background: var(--panel); color: var(--rose); font-weight: 600; }
+
+  /* CONTENEDOR DE PÁGINAS DINÁMICAS */
+  .main-content{
+    border-left: 1px solid var(--panel-border);
+    border-right: 1px solid var(--panel-border);
+    min-height: calc(100vh - 73px); padding: 32px; position: relative;
+  }
+  .page-view{ display: none; animation: fadeIn 0.4s ease forwards; }
+  .page-view.active-view { display: block; }
+
+  @keyframes fadeIn { from{ opacity: 0; transform: translateY(6px); } to{ opacity: 1; transform: translateY(0); } }
+
+  /* ELEMENTOS COMPARTIDOS / SECCIONES */
+  .section-header{ margin-bottom: 24px; }
+  .section-header h2{ font-size: 1.8rem; margin-bottom: 6px; }
+  .section-header p{ color: var(--cream-dim); font-size: 0.95rem; }
+
+  /* ===== ESTILOS DEL FEED PRINCIPAL (INICIO) ===== */
+  .hero-banner{
+    background: linear-gradient(135deg, #1c1525 0%, #110e16 100%);
+    border: 1px solid var(--panel-border); border-radius: var(--radius-lg);
+    padding: 40px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .hero-info h1 { font-size: 2.4rem; margin-bottom: 12px; line-out: 1.1; }
+  .hero-info p { color: var(--cream-dim); font-size: 1rem; max-width: 480px; margin-bottom: 24px; line-height: 1.5; }
+  
+  .feed-tabs{ display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--panel-border); padding-bottom: 12px; }
+  .tab-pill{ padding: 8px 16px; border-radius: 999px; background: var(--panel); font-size: 0.84rem; color: var(--cream-dim); transition: var(--transition); }
+  .tab-pill.active{ background: var(--rose); color: var(--bg); font-weight: 600; }
+
+  /* Tarjetas de Post / Publicaciones */
+  .post-card{
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px;
+  }
+  .post-user{ display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .user-avatar{ width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(45deg, var(--rose), var(--gold)); color: var(--bg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.95rem; }
+  .user-meta .name{ font-weight: 600; font-size: 0.95rem; }
+  .user-meta .handle{ color: var(--cream-dim); font-size: 0.78rem; margin-top: 2px; }
+  .post-body{ font-size: 0.96rem; line-height: 1.6; margin-bottom: 16px; }
+  .post-asset{ width:100%; aspect-ratio: 16/9; border-radius: var(--radius-md); overflow: hidden; background: var(--bg); position: relative; margin-bottom: 16px; }
+  .post-asset img{ width: 100%; height:100%; object-fit: cover; opacity: 0.85; }
+  .asset-badge{ position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; color: var(--rose); font-weight: 600; }
+  
+  .post-actions{ display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--panel-border); padding-top: 16px; }
+  .action-buttons{ display: flex; gap: 16px; color: var(--cream-dim); font-size: 0.85rem; }
+  .act-btn{ display: flex; align-items: center; gap: 6px; transition: var(--transition); }
+  .act-btn:hover{ color: var(--cream); }
+  .tip-button{ display: flex; align-items: center; gap: 6px; color: var(--gold); font-size: 0.85rem; font-weight: 600; background: rgba(201,168,118,0.1); padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(201,168,118,0.2); }
+
+  /* ===== ESTILOS SUBPÁGINAS DEDICADAS ===== */
+  
+  /* Grid de Creadores / Grid General */
+  .grid-layout{ display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  
+  /* Tarjeta de Creador (En Vivo / Explorar) */
+  .creator-card{
+    background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-lg);
+    padding: 24px; text-align: center; position: relative; transition: var(--transition);
+  }
+  .creator-card:hover{ border-color: var(--rose-dim); transform: translateY(-2px); }
+  .creator-card .user-avatar{ width: 70px; height: 70px; margin: 0 auto 14px; font-size: 1.5rem; }
+  .creator-card .live-tag{ position: absolute; top: 14px; right: 14px; background: #ff5d7a; color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+  .creator-card h3{ font-size: 1.1rem; margin-bottom: 4px; }
+  .creator-card p{ color: var(--cream-dim); font-size: 0.78rem; margin-bottom: 16px; }
+  .btn-follow{ width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--panel-border); font-size: 0.82rem; font-weight: 600; background: var(--bg-soft); transition: var(--transition); }
+  .btn-follow:hover{ background: var(--rose); color: var(--bg); border-color: var(--rose); }
+
+  /* Triggers / Grid de Categorías */
+  .trigger-box{
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg-soft) 100%);
+    border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 24px;
+    display: flex; flex-direction: column; justify-content: space-between; aspect-ratio: 1/1;
+    cursor: pointer; transition: var(--transition);
+  }
+  .trigger-box:hover{ border-color: var(--gold); transform: translateY(-2px); }
+  .trigger-box .icon{ font-size: 2rem; }
+  .trigger-box .info h3{ font-size: 1.15rem; margin-bottom: 4px; }
+  .trigger-box .info p{ color: var(--cream-dim); font-size: 0.75rem; }
+
+  /* Listas Profesionales (Guardados) */
+  .list-row{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px; background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: var(--radius-md); margin-bottom: 12px; transition: var(--transition);
+  }
+  .list-row:hover{ background: var(--panel-hover); }
+  .list-left{ display: flex; align-items: center; gap: 16px; }
+  .list-art{ width: 50px; height: 50px; border-radius: var(--radius-sm); background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--rose); font-size: 1.2rem; }
+  .list-title{ font-weight: 600; font-size: 0.95rem; }
+  .list-author{ color: var(--cream-dim); font-size: 0.78rem; margin-top: 2px; }
+
+  /* ===== COLUMNA DERECHA (RAIL INTERACTIVO) ===== */
+  .right-rail{ padding: 32px 24px; position: sticky; top: 73px; height: calc(100vh - 73px); display: flex; flex-direction: column; gap: 24px; }
+  .rail-box{ background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 20px; }
+  .rail-box h3{ font-size: 0.95rem; margin-bottom: 16px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  .profile-preview { display: flex; align-items: center; gap: 12px; }
+  
+  .trend-item{ display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--panel-border); font-size: 0.85rem; }
+  .trend-item:last-child{ border-bottom: none; }
+  .trend-item .hashtag{ color: var(--cream); font-weight: 500; }
+  .trend-item .stats{ color: var(--cream-dim); font-size: 0.75rem; }
+
+  /* ===== CONFIGURACIÓN DE FORMULARIOS PRO ===== */
+  .form-group{ margin-bottom: 20px; }
+  .form-group label{ display: block; font-size: 0.8rem; color: var(--cream-dim); margin-bottom: 8px; font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea{
+    width: 100%; background: var(--bg); border: 1px solid var(--panel-border); padding: 12px; border-radius: var(--radius-sm); color: var(--cream); font-family: inherit; outline: none; transition: var(--transition);
+  }
+  .form-group input:focus, .form-group textarea:focus{ border-color: var(--rose); }
+
+  /* ===== ESTADOS DE CARGA (SKELETON SIMULADO) ===== */
+  .loader-backdrop{ position: absolute; inset: 0; background: var(--bg); z-index: 10; display: none; align-items: center; justify-content: center; }
+  .spinner { width: 30px; height: 30px; border: 2px solid var(--panel-border); border-top-color: var(--rose); border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1150px) { .app-container { grid-template-columns: 80px 1fr; } .right-rail { display: none; } .sidebar-link span, .group-title { display: none; } .sidebar-link { justify-content: center; } }
+  @media (max-width: 768px) { .app-container { grid-template-columns: 1fr; } .sidebar { display: none; } nav.nav-central { display: none; } header { padding: 16px; } .main-content { padding: 16px; } }
 </style>
 </head>
 <body>
 
-<div class="ambient"></div>
+<div class="ambient-glow"></div>
 
+<!-- ===== NAV BAR SUPERIOR ===== -->
 <header>
-  <div class="logo">
-    <div class="mark"><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="logo-text">Susurro<span class="dot">.</span></div>
+  <div class="logo" onclick="navigateTo('view-inicio')">
+    <div class="logo-icon"><span></span><span></span><span></span><span></span></div>
+    <div class="logo-text">Susurro<span>.</span></div>
   </div>
 
-  <nav class="main-nav">
-    <a href="#" class="active">Para ti</a>
-    <a href="#">Siguiendo</a>
-    <a href="#">En vivo</a>
-    <a href="#">Explorar triggers</a>
+  <nav class="nav-central">
+    <button class="nav-btn active" onclick="navigateTo('view-inicio', this)">Para ti</button>
+    <button class="nav-btn" onclick="navigateTo('view-siguiendo', this)">Siguiendo</button>
+    <button class="nav-btn" onclick="navigateTo('view-envivo', this)">En vivo</button>
+    <button class="nav-btn" onclick="navigateTo('view-triggers', this)">Explorar Triggers</button>
   </nav>
 
-  <div class="nav-right">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" placeholder="Buscar creadores, triggers...">
+  <div class="header-actions">
+    <div class="search-container">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar creadores o sonidos...">
     </div>
-    <button class="icon-btn" title="Mensajes">
+    <button class="circle-icon" onclick="navigateTo('view-mensajes')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span class="badge-dot"></span>
+      <span class="dot-badge"></span>
     </button>
-    <button class="icon-btn" title="Notificaciones">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="badge-dot"></span>
-    </button>
-    <button class="btn btn-primary" onclick="openUpload()">+ Subir</button>
-    <div class="avatar">MJ</div>
+    <button class="btn btn-accent" onclick="navigateTo('view-subir')">+ Crear</button>
   </div>
 </header>
 
-<div class="app">
+<!-- ===== CONTENEDOR PRINCIPAL INTERNO ===== -->
+<div class="app-container">
 
+  <!-- ===== BARRA LATERAL (MENÚ PRINCIPAL DE NAVEGACIÓN) ===== -->
   <aside class="sidebar">
-    <div class="side-section">
-      <a href="#" class="side-link active">
+    <div class="menu-group">
+      <div class="group-title mono">Descubrir</div>
+      <button class="sidebar-link active" onclick="navigateTo('view-inicio', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
-        <span class="lbl">Inicio</span>
-      </a>
-      <a href="#" class="side-link">
+        <span>Inicio</span>
+      </button>
+      <button class="sidebar-link" onclick="navigateTo('view-envivo', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span class="lbl">En vivo ahora</span>
-      </a>
-      <a href="#" class="side-link">
+        <span>En vivo ahora</span>
+      </button>
+      <button class="sidebar-link" onclick="navigateTo('view-triggers', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span class="lbl">Explorar</span>
-      </a>
-      <a href="#" class="side-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span class="lbl">Guardados</span>
-      </a>
-      <a href="#" class="side-link">
+        <span>Explorar categorías</span>
+      </button>
+    </div>
+
+    <div class="menu-group">
+      <div class="group-title mono">Biblioteca Personal</div>
+      <button class="sidebar-link" onclick="navigateTo('view-guardados', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span>Guardados e Historial</span>
+      </button>
+      <button class="sidebar-link" onclick="navigateTo('view-suscripciones', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
-        <span class="lbl">Mis suscripciones</span>
-      </a>
+        <span>Suscripciones Premium</span>
+      </button>
     </div>
 
-    <div class="side-section">
-      <div class="side-label mono">Siguiendo en vivo</div>
-      <div class="creator-mini">
-        <div class="ava-status"><div class="avatar" style="width:100%;height:100%;font-size:0.75rem;">LR</div></div>
-        <div class="creator-mini-info"><div class="name">Luna Rivers</div><div class="tag">Susurros + mic</div></div>
-      </div>
-      <div class="creator-mini">
-        <div class="ava-status"><div class="avatar" style="width:100%;height:100%;font-size:0.75rem;">KT</div></div>
-        <div class="creator-mini-info"><div class="name">Kenji Tanabe</div><div class="tag">Roleplay relax</div></div>
-      </div>
-      <div class="creator-mini">
-        <div class="avatar" style="width:30px;height:30px;font-size:0.75rem;">SO</div>
-        <div class="creator-mini-info"><div class="name">Sofía Oaks</div><div class="tag">Tapping · offline</div></div>
-      </div>
-    </div>
-
-    <div class="side-section">
-      <div class="side-label mono">Tu canal</div>
-      <a href="#" class="side-link">
+    <div class="menu-group">
+      <div class="group-title mono">Estudio de Control</div>
+      <button class="sidebar-link" onclick="navigateTo('view-panel', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        <span class="lbl">Panel de creador</span>
-      </a>
-      <a href="#" class="side-link">
+        <span>Panel de Creador</span>
+      </button>
+      <button class="sidebar-link" onclick="navigateTo('view-config', this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span class="lbl">Configuración</span>
-      </a>
+        <span>Configuración del Sistema</span>
+      </button>
     </div>
   </aside>
 
-  <main class="feed">
+  <!-- ===== NÚCLEO DINÁMICO DE SUBPÁGINAS ===== -->
+  <main class="main-content">
+    
+    <!-- Efecto global de carga simulada inter-páginas -->
+    <div class="loader-backdrop" id="pageLoader"><div class="spinner"></div></div>
 
-    <section class="hero">
-      <div class="hero-eyebrow mono"><span class="live-pulse"></span> 12 creadores en vivo ahora mismo</div>
-      <h1>Cierra los ojos.<br>Escucha <em>algo nuevo</em>.</h1>
-      <p>El feed con vida de las personas que sigues: directos, susurros recién subidos y los triggers que más se están escuchando hoy.</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary" onclick="openUpload()">Subir mi primer susurro</button>
-        <button class="btn btn-ghost">Ver en vivo</button>
+    <!-- SUBPÁGINA 1: INICIO (FEED PRINCIPAL) -->
+    <div id="view-inicio" class="page-view active-view">
+      <div class="hero-banner">
+        <div class="hero-info">
+          <h1>Diseño acústico para<br>tu bienestar mental.</h1>
+          <p>Explora producciones espaciales de alta fidelidad. Susurros binaurales, aislamiento acústico y relajación profunda continua.</p>
+          <button class="btn btn-accent" onclick="navigateTo('view-subir')">Comenzar producción</button>
+        </div>
       </div>
-      <div class="hero-waveform" aria-hidden="true">
-        <span style="animation-delay:0.0s"></span><span style="animation-delay:0.1s"></span><span style="animation-delay:0.2s"></span>
-        <span style="animation-delay:0.3s"></span><span style="animation-delay:0.15s"></span><span style="animation-delay:0.25s"></span>
-        <span style="animation-delay:0.05s"></span><span style="animation-delay:0.35s"></span><span style="animation-delay:0.2s"></span>
-        <span style="animation-delay:0.4s"></span><span style="animation-delay:0.1s"></span><span style="animation-delay:0.3s"></span>
-        <span style="animation-delay:0.0s"></span><span style="animation-delay:0.2s"></span><span style="animation-delay:0.15s"></span>
+      
+      <div class="feed-tabs">
+        <button class="tab-pill active">Todos los triggers</button>
+        <button class="tab-pill">Lanzamientos de audio</button>
+        <button class="tab-pill">Video 4K HDR</button>
       </div>
-    </section>
 
-    <div class="live-strip">
-      <div class="live-card">
-        <div class="live-ring"><div class="avatar">LR</div></div>
-        <div class="lname">Luna Rivers</div>
-        <div class="ltag"><span class="dot"></span> en vivo</div>
-      </div>
-      <div class="live-card">
-        <div class="live-ring"><div class="avatar">KT</div></div>
-        <div class="lname">Kenji T.</div>
-        <div class="ltag"><span class="dot"></span> en vivo</div>
-      </div>
-      <div class="live-card">
-        <div class="live-ring"><div class="avatar">NM</div></div>
-        <div class="lname">Nadia M.</div>
-        <div class="ltag"><span class="dot"></span> en vivo</div>
-      </div>
-      <div class="live-card">
-        <div class="live-ring" style="background:var(--panel-border);"><div class="avatar">EP</div></div>
-        <div class="lname">Elia Park</div>
-        <div class="ltag" style="color:var(--cream-dim);">hace 2h</div>
-      </div>
-      <div class="live-card">
-        <div class="live-ring" style="background:var(--panel-border);"><div class="avatar">RS</div></div>
-        <div class="lname">Rio Santos</div>
-        <div class="ltag" style="color:var(--cream-dim);">hace 5h</div>
-      </div>
-    </div>
-
-    <div class="upload-bar" onclick="openUpload()">
-      <div class="avatar">MJ</div>
-      <div class="upload-fake-input">¿Qué susurro vas a compartir hoy?</div>
-      <div class="upload-bar-actions">
-        <button class="icon-btn" title="Subir audio">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        </button>
-        <button class="icon-btn" title="Subir video">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="feed-tabs">
-      <button class="feed-tab active">Para ti</button>
-      <button class="feed-tab">Siguiendo</button>
-      <button class="feed-tab">Susurros (audio)</button>
-      <button class="feed-tab">Video ASMR</button>
-      <button class="feed-tab">Tapping</button>
-      <button class="feed-tab">Roleplay</button>
-      <button class="feed-tab">Sin palabras</button>
-    </div>
-
-    <article class="post">
-      <div class="post-head">
-        <div class="avatar">LR</div>
-        <div class="meta">
-          <div class="name-row">Luna Rivers
-            <svg class="verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.2 3.2-.5 1 3.1 3.1 1-.5 3.2L23 12l-2.2 2.4.5 3.2-3.1 1-1 3.1-3.2-.5L12 23l-2.4-2.2-3.2.5-1-3.1-3.1-1 .5-3.2L1 12l2.2-2.4-.5-3.2 3.1-1 1-3.1 3.2.5z"/></svg>
+      <article class="post-card">
+        <div class="post-user">
+          <div class="user-avatar">LR</div>
+          <div class="user-meta">
+            <div class="name">Luna Rivers</div>
+            <div class="handle">@luna.rivers · Hace 12 minutos</div>
           </div>
-          <div class="sub">@lunarivers_asmr · hace 38 min</div>
         </div>
-        <button class="post-menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
-        </button>
-      </div>
-      <div class="post-text">Sesión nocturna de hoy: tapping en madera + susurros en español 🌙 <span class="triggers">#tapping #susurros #relax</span></div>
-      <div class="post-media">
-        <img src="https://images.unsplash.com/photo-1518457607834-6e8d80c183c5?q=80&w=1200&auto=format&fit=crop" alt="Sesión ASMR nocturna">
-        <div class="media-tag">🎥 Video ASMR</div>
-        <div class="media-duration">24:18</div>
-        <div class="play-overlay">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <div class="post-body">Inmersión profunda de media noche: Aislamiento estéreo con micro-tapping sobre superficies de madera noble y resina. Recomendado uso de auriculares.</div>
+        <div class="post-asset">
+          <img src="https://images.unsplash.com/photo-1518457607834-6e8d80c183c5?q=80&w=1200&auto=format&fit=crop" alt="ASMR session">
+          <span class="asset-badge">🎥 Spatial Video</span>
         </div>
-      </div>
-      <div class="post-stats">
-        <div class="stack-icons"><span>♥</span><span>♥</span><span>♥</span></div>
-        <span>2,847 personas relajándose con esto</span>
-      </div>
-      <div class="post-actions">
-        <div class="action-group">
-          <button class="action-btn liked">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            2.8K
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            312
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-            Compartir
-          </button>
-          <button class="action-btn saved">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          </button>
-        </div>
-        <button class="tip-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" opacity="0"/><circle cx="12" cy="9" r="2.4"/></svg>
-          Enviar propina
-        </button>
-      </div>
-    </article>
-
-    <article class="post">
-      <div class="post-head">
-        <div class="avatar">KT</div>
-        <div class="meta">
-          <div class="name-row">Kenji Tanabe
-            <svg class="verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 2.2 3.2-.5 1 3.1 3.1 1-.5 3.2L23 12l-2.2 2.4.5 3.2-3.1 1-1 3.1-3.2-.5L12 23l-2.4-2.2-3.2.5-1-3.1-3.1-1 .5-3.2L1 12l2.2-2.4-.5-3.2 3.1-1 1-3.1 3.2.5z"/></svg>
+        <div class="post-actions">
+          <div class="action-buttons">
+            <button class="act-btn">❤️ 1.4K</button>
+            <button class="act-btn">💬 142 comentarios</button>
           </div>
-          <div class="sub">@kenji.whispers · hace 2 h</div>
+          <button class="tip-button">💎 Enviar Soporte</button>
         </div>
-        <button class="post-menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
-        </button>
-      </div>
-      <div class="post-text">Episodio 14 del podcast susurrado: "Lluvia en la ventana del tren" — solo audio, ideal para dormir. <span class="triggers">#audio #lluvia #dormir</span></div>
-      <div class="audio-card">
-        <button class="audio-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
-        <div class="audio-wave" id="wave2"></div>
-        <div class="audio-time">06:42</div>
-      </div>
-      <div class="post-stats">
-        <div class="stack-icons"><span>♥</span><span>♥</span><span>♥</span></div>
-        <span>1,204 escuchas hoy</span>
-      </div>
-      <div class="post-actions">
-        <div class="action-group">
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            1.2K
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            89
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-            Compartir
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          </button>
-        </div>
-        <button class="tip-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="9" r="2.4"/></svg>
-          Enviar propina
-        </button>
-      </div>
-    </article>
+      </article>
+    </div>
 
-    <article class="post">
-      <div class="post-head">
-        <div class="avatar">NM</div>
-        <div class="meta">
-          <div class="name-row">Nadia Moss</div>
-          <div class="sub">@nadia.softly · hace 4 h</div>
+    <!-- SUBPÁGINA 2: SIGUIENDO -->
+    <div id="view-siguiendo" class="page-view">
+      <div class="section-header">
+        <h2>Canales seguidos</h2>
+        <p>Actualizaciones en tiempo real y contenido exclusivo de tus creadores preferidos.</p>
+      </div>
+      <div class="grid-layout">
+        <div class="creator-card">
+          <div class="user-avatar">KT</div>
+          <h3>Kenji Tanabe</h3>
+          <p>Especialista en Audio Inmersivo y Paisajes de Lluvia.</p>
+          <button class="btn-follow">Ver Canal</button>
         </div>
-        <button class="post-menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
-        </button>
-      </div>
-      <div class="post-text">Roleplay: "tu primera visita al spa de susurros" — con sonidos de agua y mic brushing al final ✨</div>
-      <div class="post-media">
-        <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200&auto=format&fit=crop" alt="Roleplay ASMR spa">
-        <div class="media-tag">🎥 Video ASMR</div>
-        <div class="media-duration">18:05</div>
-        <div class="play-overlay">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <div class="creator-card">
+          <div class="user-avatar">SO</div>
+          <h3>Sofia Oaks</h3>
+          <p>Tapping rápido y dinámicas visuales lo-fi.</p>
+          <button class="btn-follow">Ver Canal</button>
         </div>
       </div>
-      <div class="post-stats">
-        <div class="stack-icons"><span>♥</span><span>♥</span><span>♥</span></div>
-        <span>956 personas relajándose con esto</span>
+    </div>
+
+    <!-- SUBPÁGINA 3: EN VIVO -->
+    <div id="view-envivo" class="page-view">
+      <div class="section-header">
+        <h2>Transmisiones en vivo</h2>
+        <p>Interactúa en tiempo real con salas de aislamiento y cabinas acústicas activas en este momento.</p>
       </div>
-      <div class="post-actions">
-        <div class="action-group">
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            956
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            41
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-            Compartir
-          </button>
-          <button class="action-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          </button>
+      <div class="grid-layout">
+        <div class="creator-card">
+          <span class="live-tag">En vivo</span>
+          <div class="user-avatar">LR</div>
+          <h3>Luna Rivers</h3>
+          <p>🎧 Mic brushing bilateral extremo · 4.2k escuchando</p>
+          <button class="btn-accent" style="width:100%; font-size:0.85rem; padding:8px;">Unirse a la sala</button>
         </div>
-        <button class="tip-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="9" r="2.4"/></svg>
-          Enviar propina
-        </button>
+        <div class="creator-card">
+          <span class="live-tag">En vivo</span>
+          <div class="user-avatar">NM</div>
+          <h3>Nadia Moss</h3>
+          <p>💤 Tratamiento clínico para el insomnio crónico</p>
+          <button class="btn-accent" style="width:100%; font-size:0.85rem; padding:8px;">Unirse a la sala</button>
+        </div>
       </div>
-    </article>
+    </div>
+
+    <!-- SUBPÁGINA 4: EXPLORAR TRIGGERS -->
+    <div id="view-triggers" class="page-view">
+      <div class="section-header">
+        <h2>Filtro de Triggers Acústicos</h2>
+        <p>Selecciona frecuencias y técnicas específicas mapeadas matemáticamente para inducir respuestas ASMR.</p>
+      </div>
+      <div class="grid-layout" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+        <div class="trigger-box">
+          <div class="icon">🎙️</div>
+          <div class="info"><h3>Susurros</h3><p>Binaurales, aireados y cercanos</p></div>
+        </div>
+        <div class="trigger-box">
+          <div class="icon">🪵</div>
+          <div class="info"><h3>Tapping</h3><p>Madera, vidrio y texturas densas</p></div>
+        </div>
+        <div class="trigger-box">
+          <div class="icon">🖌️</div>
+          <div class="info"><h3>Mic Brushing</h3><p>Limpieza profunda de cápsulas de audio</p></div>
+        </div>
+        <div class="trigger-box">
+          <div class="icon">🌧️</div>
+          <div class="info"><h3>Climatología</h3><p>Lluvia analógica y ruido blanco natural</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 5: GUARDADOS -->
+    <div id="view-guardados" class="page-view">
+      <div class="section-header">
+        <h2>Biblioteca Personal</h2>
+        <p>Tu archivo de relajación fuera de línea e historial de audiciones.</p>
+      </div>
+      <div class="list-row">
+        <div class="list-left">
+          <div class="list-art">🎵</div>
+          <div>
+            <div class="list-title">Estudio Fractal del Agua (Frecuencias Delta)</div>
+            <div class="list-author">Kenji Tanabe · Duración: 42:10</div>
+          </div>
+        </div>
+        <button class="btn-follow" style="width:auto; padding: 6px 14px;">Reproducir</button>
+      </div>
+      <div class="list-row">
+        <div class="list-left">
+          <div class="list-art">🎥</div>
+          <div>
+            <div class="list-title">Mapeo Craneal Tridimensional y Cepillado de Oídos</div>
+            <div class="list-author">Luna Rivers · Duración: 18:45</div>
+          </div>
+        </div>
+        <button class="btn-follow" style="width:auto; padding: 6px 14px;">Reproducir</button>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 6: SUSCRIPCIONES -->
+    <div id="view-suscripciones" class="page-view">
+      <div class="section-header">
+        <h2>Suscripciones Premium</h2>
+        <p>Acceso a canales privados sin compresión de audio y con soporte directo (FLAC de 24 bits).</p>
+      </div>
+      <div style="background: var(--panel); border: 1px solid var(--gold); border-radius: var(--radius-lg); padding: 32px; text-align: center; max-width: 450px; margin: 40px auto 0;">
+        <span style="color:var(--gold); font-size:0.8rem;" class="mono">Acceso Completo</span>
+        <h3 style="font-size: 1.8rem; margin:12px 0 8px;">Plan Suscriptor Pro</h3>
+        <p style="color:var(--cream-dim); font-size:0.9rem; margin-bottom:24px;">Disfruta del catálogo completo sin anuncios, audio sin pérdidas y transmisiones prioritarias.</p>
+        <button class="btn btn-accent" style="width: 100%; background: var(--gold); color: var(--bg);">Gestionar Planes Activos</button>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 7: PANEL DE CREADOR -->
+    <div id="view-panel" class="page-view">
+      <div class="section-header">
+        <h2>Panel de Gestión Acústica</h2>
+        <p>Analíticas avanzadas de tus transmisiones y control de audiencias.</p>
+      </div>
+      <div class="grid-layout" style="margin-bottom: 32px;">
+        <div class="creator-card" style="text-align: left; padding: 20px;">
+          <div style="color: var(--rose);" class="mono group-title">Oyentes Activos</div>
+          <div style="font-size: 2rem; font-family:'Fraunces', serif; margin-top:8px;">2,481</div>
+        </div>
+        <div class="creator-card" style="text-align: left; padding: 20px;">
+          <div style="color: var(--gold);" class="mono group-title">Fondo Acumulado</div>
+          <div style="font-size: 2rem; font-family:'Fraunces', serif; margin-top:8px;">$341.20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 8: CONFIGURACIÓN -->
+    <div id="view-config" class="page-view">
+      <div class="section-header">
+        <h2>Configuración Global del Sistema</h2>
+        <p>Configura las propiedades del reproductor y los flujos de privacidad.</p>
+      </div>
+      <div style="max-width: 500px;">
+        <div class="form-group">
+          <label>Calidad Predeterminada del Streaming</label>
+          <select><option>FLAC Inmersivo (Sin pérdida)</option><option>AAC 320kbps (Alta fidelidad)</option><option>Opus 160kbps (Ahorro de datos)</option></select>
+        </div>
+        <div class="form-group">
+          <label>Mapeo de Salida de Audio</label>
+          <select><option>Binaural Avanzado (Auriculares)</option><option>Estéreo Espacializado (Altavoces)</option></select>
+        </div>
+        <button class="btn btn-accent" style="margin-top:10px;">Salvar Preferencias</button>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 9: INTERFAZ DE CARGA / SUBIR CONTENIDO -->
+    <div id="view-subir" class="page-view">
+      <div class="section-header">
+        <h2>Estudio de Carga</h2>
+        <p>Inyecta archivos maestros de audio o video directamente al servidor de procesamiento perimetral.</p>
+      </div>
+      <div style="max-width: 550px;">
+        <div class="form-group">
+          <label>Título de la obra</label>
+          <input type="text" placeholder="Ej: Aislamiento acústico nocturno en cabina">
+        </div>
+        <div class="form-group">
+          <label>Descripción técnica</label>
+          <textarea rows="4" placeholder="Especifica los micrófonos usados, ganancia y triggers..."></textarea>
+        </div>
+        <button class="btn btn-accent" onclick="simularPublicacion()">Ejecutar publicación</button>
+      </div>
+    </div>
+
+    <!-- SUBPÁGINA 10: MENSAJES PRIVADOS -->
+    <div id="view-mensajes" class="page-view">
+      <div class="section-header">
+        <h2>Comunicaciones Seguras</h2>
+        <p>Bandeja de entrada directa y cifrada con tu red de creadores y suscriptores.</p>
+      </div>
+      <div class="list-row">
+        <div class="list-left">
+          <div class="user-avatar" style="width:40px; height:40px;">LR</div>
+          <div>
+            <div class="list-title">Luna Rivers</div>
+            <div class="list-author">"Hola, ¿revisaste la ganancia del micrófono estéreo para el live?"</div>
+          </div>
+        </div>
+        <span style="font-size:0.75rem; color: var(--rose-dim);">Hace 5m</span>
+      </div>
+    </div>
 
   </main>
 
-  <aside class="rail">
-
-    <div class="rail-card">
-      <div class="stat-self">
-        <div class="avatar" style="width:48px;height:48px;font-size:1.1rem;">MJ</div>
-        <div class="info">
-          <div class="name">Mariana J.</div>
-          <div class="handle">@mariana.creates</div>
+  <!-- ===== COLUMNA DERECHA COMPLEMENTARIA ===== -->
+  <aside class="right-rail">
+    <div class="rail-box">
+      <h3>Perfil Activo</h3>
+      <div class="profile-preview">
+        <div class="user-avatar" style="background: linear-gradient(135deg, var(--gold), var(--rose));">MJ</div>
+        <div>
+          <div style="font-weight:600; font-size:0.92rem;">Mariana J.</div>
+          <div style="color:var(--cream-dim); font-size:0.75rem;">Estudio Profesional</div>
         </div>
       </div>
-      <div class="stat-grid">
-        <div class="stat-box"><div class="num">312</div><div class="lbl mono">Susurros</div></div>
-        <div class="stat-box"><div class="num">8.4K</div><div class="lbl mono">Seguidores</div></div>
-        <div class="stat-box"><div class="num">96</div><div class="lbl mono">Suscriptores</div></div>
-      </div>
     </div>
 
-    <div class="rail-card">
-      <div class="rail-title">Creadores sugeridos <span class="see-all">ver todos</span></div>
-      <div class="suggest-row">
-        <div class="avatar">EP</div>
-        <div class="info"><div class="name">Elia Park</div><div class="desc">Mic brushing · 14K seguidores</div></div>
-        <button class="follow-pill">Seguir</button>
-      </div>
-      <div class="suggest-row">
-        <div class="avatar">RS</div>
-        <div class="info"><div class="name">Rio Santos</div><div class="desc">Roleplay · 9.1K seguidores</div></div>
-        <button class="follow-pill following">Siguiendo</button>
-      </div>
-      <div class="suggest-row">
-        <div class="avatar">AV</div>
-        <div class="info"><div class="name">Ana Vergara</div><div class="desc">Sin palabras · 22K seguidores</div></div>
-        <button class="follow-pill">Seguir</button>
-      </div>
-      <div class="suggest-row">
-        <div class="avatar">DC</div>
-        <div class="info"><div class="name">Diego Cano</div><div class="desc">Tapping · 5.3K seguidores</div></div>
-        <button class="follow-pill">Seguir</button>
-      </div>
+    <div class="rail-box">
+      <h3>Tendencias en Frecuencia</h3>
+      <div class="trend-item"><span class="hashtag">#AislamientoBinaural</span><span class="stats">4.8k horas</span></div>
+      <div class="trend-item"><span class="hashtag">#TappingLento</span><span class="stats">3.2k horas</span></div>
+      <div class="trend-item"><span class="hashtag">#RespiracionEspacial</span><span class="stats">1.9k horas</span></div>
     </div>
-
-    <div class="rail-card">
-      <div class="rail-title">Triggers en tendencia</div>
-      <div class="trend-row"><span class="tag">#susurrosensueño</span><span class="count">3.2K posts</span></div>
-      <div class="trend-row"><span class="tag">#tappingmadera</span><span class="count">2.7K posts</span></div>
-      <div class="trend-row"><span class="tag">#roleplayrelax</span><span class="count">1.9K posts</span></div>
-      <div class="trend-row"><span class="tag">#lluviaparadormir</span><span class="count">1.4K posts</span></div>
-      <div class="trend-row"><span class="tag">#micbrushing</span><span class="count">980 posts</span></div>
-    </div>
-
-    <footer class="rail-foot">
-      <div>Sobre · Privacidad · Términos · Comunidad · Ayuda</div>
-      <div style="margin-top:6px;">© 2026 Susurro. Hecho para quienes escuchan con cuidado.</div>
-    </footer>
   </aside>
 
 </div>
 
-<button class="fab-upload" onclick="openUpload()" title="Subir">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-</button>
-
-<div class="modal-backdrop" id="uploadModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Subir un nuevo susurro</h3>
-      <button class="modal-close" onclick="closeUpload()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="upload-tabs">
-        <button class="upload-tab active" onclick="setUploadTab(this,'audio')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-          Audio
-        </button>
-        <button class="upload-tab" onclick="setUploadTab(this,'video')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          Video
-        </button>
-        <button class="upload-tab" onclick="setUploadTab(this,'live')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          Ir en vivo
-        </button>
-      </div>
-
-      <div class="dropzone">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <div class="dz-title">Arrastra tu archivo aquí</div>
-        <div class="dz-sub">o haz clic para seleccionar — MP3, WAV, MP4, MOV (máx. 2 GB)</div>
-      </div>
-
-      <div class="field">
-        <label>Título</label>
-        <input type="text" placeholder="Ej: Susurros para dormir profundo">
-      </div>
-      <div class="field">
-        <label>Descripción</label>
-        <textarea rows="3" placeholder="Cuéntale a tus oyentes qué van a escuchar..."></textarea>
-      </div>
-      <div class="field">
-        <label>Triggers</label>
-        <div class="chip-row">
-          <span class="chip sel">Susurros</span>
-          <span class="chip">Tapping</span>
-          <span class="chip">Roleplay</span>
-          <span class="chip">Mic brushing</span>
-          <span class="chip">Lluvia</span>
-          <span class="chip">Sin palabras</span>
-          <span class="chip">+ Añadir</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <label class="visibility-toggle">
-        <input type="checkbox" id="subOnly"> Solo para suscriptores
-      </label>
-      <button class="btn btn-primary" onclick="closeUpload()">Publicar susurro</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  // --- build audio waveform bars ---
-  function buildWave(id, playedRatio){
-    const el = document.getElementById(id);
-    if(!el) return;
-    const bars = 46;
-    for(let i=0;i<bars;i++){
-      const h = 20 + Math.random()*80;
-      const span = document.createElement('span');
-      span.style.height = h + '%';
-      if(i/bars < playedRatio) span.classList.add('played');
-      el.appendChild(span);
-    }
-  }
-  buildWave('wave2', 0.35);
+  /**
+   * Enrutador Nativo para SPA (Single Page Application)
+   * Oculta de manera eficiente las vistas e introduce un loader profesional entre cargas de páginas
+   */
+  function navigateTo(viewId, elementTrigger = null) {
+    const loader = document.getElementById('pageLoader');
+    
+    // Activar loader visual
+    loader.style.display = 'flex';
 
-  // --- feed tab switching ---
-  document.querySelectorAll('.feed-tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  // --- like / save toggles ---
-  document.querySelectorAll('.action-btn').forEach(btn=>{
-    const svg = btn.querySelector('svg');
-    if(!svg) return;
-    const isHeart = svg.innerHTML.includes('20.84 4.61');
-    const isBookmark = svg.innerHTML.includes('19 21l-7-5');
-    if(isHeart){
-      btn.addEventListener('click', ()=>{
-        btn.classList.toggle('liked');
+    setTimeout(() => {
+      // Ocultar todas las subpáginas
+      document.querySelectorAll('.page-view').forEach(view => {
+        view.classList.remove('active-view');
       });
-    }
-    if(isBookmark){
-      btn.addEventListener('click', ()=> btn.classList.toggle('saved'));
-    }
-  });
 
-  // --- follow pill toggles ---
-  document.querySelectorAll('.follow-pill').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      btn.classList.toggle('following');
-      btn.textContent = btn.classList.contains('following') ? 'Siguiendo' : 'Seguir';
-    });
-  });
+      // Activar la vista solicitada
+      const targetView = document.getElementById(viewId);
+      if(targetView) {
+        targetView.classList.add('active-view');
+      }
 
-  // --- chip select (triggers) ---
-  document.querySelectorAll('.chip').forEach(chip=>{
-    chip.addEventListener('click', ()=> chip.classList.toggle('sel'));
-  });
+      // Sincronizar estados visuales de los botones de navegación laterales y superiores
+      if(elementTrigger) {
+        // Remover clases activas previas en todo el documento
+        document.querySelectorAll('.sidebar-link, .nav-btn').forEach(node => {
+          node.classList.remove('active');
+        });
+        
+        // Activar el disparador actual
+        elementTrigger.classList.add('active');
+      }
 
-  // --- upload tabs inside modal ---
-  function setUploadTab(el, type){
-    document.querySelectorAll('.upload-tab').forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
+      // Ocultar el loader y regresar el scroll a la parte superior de forma fluida
+      loader.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 350); // Tiempo óptimo de simulación de respuesta de red
   }
 
-  // --- modal open/close ---
-  function openUpload(){ document.getElementById('uploadModal').classList.add('open'); }
-  function closeUpload(){ document.getElementById('uploadModal').classList.remove('open'); }
-  document.getElementById('uploadModal').addEventListener('click', (e)=>{
-    if(e.target.id === 'uploadModal') closeUpload();
-  });
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape') closeUpload();
-  });
+  function simularPublicacion() {
+    alert("Procesando archivos multimedia en servidores perimetrales de Susurro... ¡Contenido subido con éxito!");
+    navigateTo('view-inicio');
+  }
 </script>
 
 </body>
